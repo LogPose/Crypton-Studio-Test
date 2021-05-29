@@ -31,9 +31,22 @@ export default class ApiService{
             id: this._extractId(person),
             name: person.name,
             gender: person.gender,
-            homeworld: person.homeworld,
             birthYear: person.birth_year,
+            homeworld: this.getPlanet(person.homeworld),
             liked: false,
+        }
+    }
+
+    async getPlanet(el) {
+        const regExp = /\/([0-9]*)\/$/
+        const planetID = el.match(regExp)[1]
+        const planet = await this.getResource(`/planets/${planetID}`)
+        return this._transformPlanet(planet)
+    }
+
+    _transformPlanet = (planet) => {
+        return {
+            name: planet.name
         }
     }
 
