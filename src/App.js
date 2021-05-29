@@ -20,6 +20,7 @@ export default class CharacterList extends Component {
         likedCharacters: [],
         visible: true,
         term: '',
+        planetNames: null,
     }
 
     search(event) {
@@ -27,10 +28,6 @@ export default class CharacterList extends Component {
         this.setState({
             term: newTerm
         })
-    }
-
-    onError = () => {
-
     }
 
     componentDidMount() {
@@ -115,15 +112,21 @@ export default class CharacterList extends Component {
         .then(() => {
             this.setState({loading: false})
         })
+        .catch(() => {
+            alert('Ошибка получения данных с сервера! Пожалуйста, перезагрузите страницу!')
+        })
+
+        
+
     }
 
     render () {
         const {peopleListPage1, peopleListPage2,
-               peopleListPage3, peopleListPage4,
-               peopleListPage5, peopleListPage6,
-               peopleListPage7, peopleListPage8,
-               count, likedCharacters, visible, term,
-               loading} = this.state
+            peopleListPage3, peopleListPage4,
+            peopleListPage5, peopleListPage6,
+            peopleListPage7, peopleListPage8,
+            count, likedCharacters, visible, term,
+            loading} = this.state
         
         if (!peopleListPage1) {
             return null 
@@ -133,40 +136,66 @@ export default class CharacterList extends Component {
             return <Spinner />
         }
 
-            const characterList = (arr) => {
+        const characterList = (arr) => {
 
-                const {likedCharacters} = this.state
+            const {likedCharacters} = this.state
         
-                const makeLiked = (el) => {
+            const makeLiked = (el) => {
+                if (!el.liked) {
                     const newLiked = likedCharacters
                     newLiked.push(el)
                     this.setState({
                         likedCharacters: newLiked
                     })
+                    el.liked = !el.liked
+                } else {
+                    alert('Персонаж уже был добавлен в раздел "Любимые"!')
                 }
-                try {
-                    return arr.map((el) => {
-                        return(
-                            <div key={el.id} className='char'>
-                                <img className='charImg' 
-                                    alt={el.name} src={`https://starwars-visualguide.com/assets/img/characters/${el.id}.jpg`}>
-                                    </img>
-                                    <br></br>
-                                    <h1>{el.name}</h1>
-                                    <br></br>
-                                <button id='likeButton' className='likeButton' onClick={() => makeLiked(el)}>&#128154;</button>
-                            </div>
-                        )
-                    })
-                } catch (err) {
-                    console.log(err)
-                }
-               
             }
 
+            const like = <span>&#128154;</span>
+            const cannotLike = <span>&#128153;</span>
+
+            try {
+                return arr.map((el) => {
+                    return(
+                        <div key={el.id} className='char'>
+                            <img className='charImg' 
+                                alt={el.name} src={`https://starwars-visualguide.com/assets/img/characters/${el.id}.jpg`}>
+                                </img>
+                                <br></br>
+                                <h1>{el.name}</h1>
+                            <button id='likeButton' className='likeButton' 
+                            onClick={() => makeLiked(el)}>{el.liked ? like : cannotLike}</button>
+                        </div>
+                    )
+                })
+            } catch (err) {
+                console.log(err)
+            }
+        }
+
+        const likedCharacterList = (arr) => {
+            try {
+                return arr.map((el) => {
+                    return(
+                        <div key={el.id} className='char'>
+                            <img className='charImg' 
+                                alt={el.name} src={`https://starwars-visualguide.com/assets/img/characters/${el.id}.jpg`}>
+                                </img>
+                                <br></br>
+                                <h1>{el.name}</h1>
+                                <br></br>
+                        </div>
+                    )
+                })
+            } catch (err) {
+                console.log(err)
+            }
+        }
 
         const incrementCount = () => {
-            count === 8 ? alert('Упс! Кажется, туда нельзя!') : 
+            count === 8? alert('Упс! Кажется, туда нельзя!') : 
             this.setState({count: count + 1})
             return count
         }
@@ -176,7 +205,7 @@ export default class CharacterList extends Component {
             this.setState({count: count - 1})
             return count
         }
-
+        
         const characters1 = characterList(peopleListPage1)
         const characters2 = characterList(peopleListPage2)
         const characters3 = characterList(peopleListPage3)
@@ -199,7 +228,7 @@ export default class CharacterList extends Component {
                 default: return characters1
             }
         }
-        
+
         const onSearch = (items, term) => {
             if (term.length === 0) {
                 return items
@@ -209,23 +238,30 @@ export default class CharacterList extends Component {
               })
         }
 
-        const liked = characterList(likedCharacters)
+        const liked = likedCharacters.length !== 0 ? likedCharacterList(likedCharacters) 
+                    : <h1 className="title">Вы ещё не добавили ни одного персонажа в "Любимые"!</h1>
+
+        const buttonTitle = (visible === true) ? 'Любимые персонажи' : 'Главная страница'
 
         const content = (visible === true) ? showedContent(count) : liked
-
         const visibleContent = onSearch(content, term)
+        const showed = visibleContent.length !== 0 ? visibleContent 
+        : <h1 className="title">Поиск на этой странице ничего не дал! Проверьте
+                                правильность написания имени или попробуйте поискать
+                                на другой странице!</h1>
 
         return(
             <div className='general'>
                 <div className='header'>
-                    <button className='lovedButton' onClick={() => this.setState({visible: !visible})}>Любимые персонажи</button>
+                    <button className='lovedButton' onClick={() => this.setState({visible: !visible})}>{buttonTitle}</button>
                     <input className='searchPanel' type='text' placeholder='Search' onChange={this.search.bind(this)}></input>
                 </div>   
                 <div className='charBlock'>
-                    {visibleContent}
+                    {showed}
                 </div>
                 <div className='footer'>
                     <button className='lovedButton' onClick={() => decrementCount()}>Предыдущая страница</button>
+                    <button disabled={true} className='lovedButton'>{count}</button>
                     <button className='lovedButton' onClick={() => incrementCount()}>Следующая страница</button>
                 </div>
                 

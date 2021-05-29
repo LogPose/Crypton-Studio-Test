@@ -32,6 +32,7 @@ export default class ApiService{
             name: person.name,
             gender: person.gender,
             homeworld: person.homeworld,
+            liked: false,
         }
     }
 
@@ -39,6 +40,12 @@ export default class ApiService{
         const regExp = /\/([0-9]*)\/$/
         const planetID = el.match(regExp)[1]
         const planet = await this.getResource(`/planets/${planetID}`)
-        return planet.name
+        return this._transformPlanet(planet)
+    }
+
+    _transformPlanet(planet) {
+        return{
+            name: planet.name
+        }
     }
 }
