@@ -179,13 +179,14 @@ export default class CharacterList extends Component {
             try {
                 return arr.map((el) => {
                     return(
-                        <div key={el.id} className='char'>
+                        <div key={el.id} className='charLiked'>
                             <img className='charImg' 
                                 alt={el.name} src={`https://starwars-visualguide.com/assets/img/characters/${el.id}.jpg`}>
                                 </img>
                                 <br></br>
                                 <h1>{el.name}</h1>
-                                <br></br>
+                                <h1>Gender: {el.gender}</h1>
+                                <h1>Birth year: {el.birthYear}</h1>
                         </div>
                     )
                 })

@@ -32,6 +32,7 @@ export default class ApiService{
             name: person.name,
             gender: person.gender,
             homeworld: person.homeworld,
+            birthYear: person.birth_year,
             liked: false,
         }
     }

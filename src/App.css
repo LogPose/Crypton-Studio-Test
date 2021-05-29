@@ -15,6 +15,22 @@ body{
     border: 4px rgba(49, 5, 46, 0.2) solid;
 }
 
+.charLiked{
+    width: 180px;
+    height: 310px;
+    background-color: rgba(195, 143, 255, 0.568);
+    margin: 20px;   
+    display: inline-block;
+    text-align: center;
+    border: 4px rgba(49, 5, 46, 0.2) solid;
+}
+
+.charLiked h1{
+    margin: 0;
+    font-size: 25px;
+    font-family: 'starWarsFont';
+}
+
 .likeButton{
     position: absolute;
     width: 40px;
@@ -100,10 +116,10 @@ body{
     height: 50px;
     font-family: 'starWarsFont';
     font-size: 25px;
-    color: black;
+    color: white;
     margin: 10px;
     border-radius: 50%;
-    background-color: aqua;
+    background-color: rgba(162, 0, 255, 0.5);
     border: none;
 }
 
