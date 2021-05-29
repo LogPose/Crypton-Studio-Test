@@ -8,11 +8,11 @@ body{
 .char{
     width: 180px;
     height: 250px;
-    background-color: rgb(224, 197, 255);
+    background-color: rgba(195, 143, 255, 0.568);
     margin: 20px;   
     display: inline-block;
     text-align: center;
-    border: 1px rgb(4, 58, 20) solid;
+    border: 4px rgba(49, 5, 46, 0.2) solid;
 }
 
 .likeButton{

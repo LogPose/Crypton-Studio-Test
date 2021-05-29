@@ -36,16 +36,4 @@ export default class ApiService{
         }
     }
 
-    async getPlanet(el) {
-        const regExp = /\/([0-9]*)\/$/
-        const planetID = el.match(regExp)[1]
-        const planet = await this.getResource(`/planets/${planetID}`)
-        return this._transformPlanet(planet)
-    }
-
-    _transformPlanet(planet) {
-        return{
-            name: planet.name
-        }
-    }
 }
