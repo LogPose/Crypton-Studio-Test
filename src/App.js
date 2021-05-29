@@ -21,6 +21,7 @@ export default class CharacterList extends Component {
         visible: true,
         term: '',
         planetNames: null,
+        gender: 'all',
     }
 
     search(event) {
@@ -126,7 +127,7 @@ export default class CharacterList extends Component {
             peopleListPage5, peopleListPage6,
             peopleListPage7, peopleListPage8,
             count, likedCharacters, visible, term,
-            loading} = this.state
+            loading, gender} = this.state
         
         if (!peopleListPage1) {
             return null 
@@ -239,7 +240,20 @@ export default class CharacterList extends Component {
               })
         }
 
-        const liked = likedCharacters.length !== 0 ? likedCharacterList(likedCharacters) 
+        const itemFilter = (items, gender) => {
+            if (gender === 'all') {
+                return items
+            } else if (gender === 'male') {
+                return items.filter((item) => item.gender === 'male')
+            } else if (gender === 'female') {
+                return items.filter((item) => item.gender === 'female')
+            } else if (gender === 'n/a') {
+                return items.filter((item) => item.gender === 'n/a')
+            }
+        }
+
+        const liked = likedCharacters.length !== 0 ? 
+                    likedCharacterList(itemFilter(likedCharacters, gender))
                     : <h1 className="title">Вы ещё не добавили ни одного персонажа в "Любимые"!</h1>
 
         const buttonTitle = (visible === true) ? 'Любимые персонажи' : 'Главная страница'
@@ -247,25 +261,38 @@ export default class CharacterList extends Component {
         const content = (visible === true) ? showedContent(count) : liked
         const visibleContent = onSearch(content, term)
         const showed = visibleContent.length !== 0 ? visibleContent 
-        : <h1 className="title">Поиск на этой странице ничего не дал! <br></br> Проверьте
-                                правильность написания имени или попробуйте поискать
-                                на другой странице!</h1>
+                        : <h1 className="title">Поиск на этой странице ничего не дал! <br></br> Проверьте
+                                                правильность написания имени или попробуйте поискать
+                                                на другой странице!</h1>
+
+        const originalFooter =  <div className='footer'>
+                                    <button className='lovedButton' onClick={() => decrementCount()}>Предыдущая страница</button>
+                                    <button disabled={true} className='lovedButton'>{count}</button>
+                                    <button className='lovedButton' onClick={() => incrementCount()}>Следующая страница</button>
+                                </div>
+
+        const footer = visible ? originalFooter : null
+
+        const genderButtons =   <div>
+                                    <button className='lovedButtonMale' onClick={() => this.setState({gender: 'male'})}>Мужчины</button>
+                                    <button className='lovedButtonFemale' onClick={() => this.setState({gender: 'female'})}>Женщины</button>
+                                    <button className='lovedButtonAnother' onClick={() => this.setState({gender: 'n/a'})}>Иное</button>
+                                    <button className='lovedButtonReset' onClick={() => this.setState({gender: 'all'})}>Сбросить</button>
+                                </div>
+
+        const genderButtonsVisible = visible ? null : genderButtons
 
         return(
             <div className='general'>
                 <div className='header'>
                     <button className='lovedButton' onClick={() => this.setState({visible: !visible})}>{buttonTitle}</button>
-                    <input className='searchPanel' type='text' placeholder='Search' onChange={this.search.bind(this)}></input>
+                    <input className='searchPanel' type='text' placeholder='Search' onChange={this.search.bind(this)}></input>         
                 </div>   
                 <div className='charBlock'>
+                        {genderButtonsVisible}
                     {showed}
                 </div>
-                <div className='footer'>
-                    <button className='lovedButton' onClick={() => decrementCount()}>Предыдущая страница</button>
-                    <button disabled={true} className='lovedButton'>{count}</button>
-                    <button className='lovedButton' onClick={() => incrementCount()}>Следующая страница</button>
-                </div>
-                
+                {footer}  
             </div>
         )
     }   
