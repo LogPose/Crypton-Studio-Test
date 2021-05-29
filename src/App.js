@@ -246,7 +246,7 @@ export default class CharacterList extends Component {
         const content = (visible === true) ? showedContent(count) : liked
         const visibleContent = onSearch(content, term)
         const showed = visibleContent.length !== 0 ? visibleContent 
-        : <h1 className="title">Поиск на этой странице ничего не дал! Проверьте
+        : <h1 className="title">Поиск на этой странице ничего не дал! <br></br> Проверьте
                                 правильность написания имени или попробуйте поискать
                                 на другой странице!</h1>
 
