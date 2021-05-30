@@ -16,11 +16,10 @@ export default class App extends Component {
         peopleListPage6: null,
         peopleListPage7: null,
         peopleListPage8: null,
-        count: 1,
-        likedCharacters: [],
-        visible: true,
-        term: '',
-        planetNames: null,
+        count: 1, // Текущая отображаемая страница
+        likedCharacters: [], 
+        visible: true, // Отображение блоков основной/понравившиеся
+        term: '', // Необходимое для поиска поле
         gender: 'all',
     }
 
@@ -124,12 +123,12 @@ export default class App extends Component {
     }
 
     render () {
-        const {peopleListPage1, peopleListPage2,
+        const { peopleListPage1, peopleListPage2,
             peopleListPage3, peopleListPage4,
             peopleListPage5, peopleListPage6,
             peopleListPage7, peopleListPage8,
             count, likedCharacters, visible, term,
-            loading, gender} = this.state
+            loading, gender } = this.state
         
         if (!peopleListPage1) {
             return null 
@@ -231,6 +230,8 @@ export default class App extends Component {
             }
         }
 
+        // Поиск по имени
+
         const onSearch = (items, term) => {
             if (term.length === 0) {
                 return items
@@ -239,6 +240,8 @@ export default class App extends Component {
                 return el.props.children[2].props.children.toLowerCase().indexOf(term.toLowerCase()) > -1;
             })
         }
+
+        // Фильтр по полу в разделе "Любимые персонажи"
 
         const itemFilter = (items, gender) => {
             switch(gender) {
