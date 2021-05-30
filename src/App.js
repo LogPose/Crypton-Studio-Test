@@ -3,7 +3,7 @@ import ApiService from './ApiService'
 import Spinner from './Spinner'
 import './App.css'
 
-export default class CharacterList extends Component {
+export default class App extends Component {
     swapiService = new ApiService()
 
     state = {
