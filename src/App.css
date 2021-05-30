@@ -8,7 +8,7 @@ body{
 .char{
     width: 180px;
     height: 250px;
-    background-color: rgba(195, 143, 255, 0.568);
+    background-color: rgba(217, 184, 255, 0.644);
     margin: 20px;   
     display: inline-block;
     text-align: center;
@@ -18,7 +18,7 @@ body{
 .charLiked{
     width: 180px;
     height: 310px;
-    background-color: rgba(195, 143, 255, 0.568);
+    background-color: rgba(229, 206, 255, 0.568);
     margin: 20px;   
     display: inline-block;
     text-align: center;
@@ -39,11 +39,11 @@ body{
     margin-left: 30px;
     border-radius: 50%;
     border: none;
-    background-color: rgba(158, 255, 179, 0.486);
+    background-color: rgba(71, 223, 104, 0.575);
 }
 
 .likeButton:hover{
-    background-color: rgba(158, 255, 179, 0.856);
+    background-color: rgba(53, 255, 97, 0.712);
     box-shadow: 2px 2px 4px rgb(33, 223, 74), -2px -2px 4px rgb(33, 223, 74),
                 -2px 2px 4px rgb(33, 223, 74), 2px -2px 4px rgb(33, 223, 74);
 }
@@ -53,8 +53,8 @@ body{
 }
 
 .char:hover{
-    box-shadow: 2px 2px 3px rgba(227, 137, 255, 0.801), -2px -2px 3px rgba(227, 137, 255, 0.801),
-                -2px 2px 3px rgba(227, 137, 255, 0.801), 2px -2px 3px rgba(227, 137, 255, 0.801);
+    box-shadow: 2px 2px 4px rgba(172, 49, 255, 0.801), -2px -2px 4px rgba(172, 49, 255, 0.801),
+                -2px 2px 4px rgba(172, 49, 255, 0.801), 2px -2px 4px rgba(172, 49, 255, 0.801);
 }
 
 .char h1{
@@ -91,17 +91,14 @@ body{
     border-radius: 40px;
 }
 
-
-
 .charBlock{
     width: 1000px;
-    min-height: 400px;
+    min-height: 200px;
     margin: 20px auto;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
 }
-
 
 .lovedButton{
     width: 250px;
@@ -135,7 +132,7 @@ body{
     font-family: 'starWarsFont';
     font-size: 25px;
     margin: 10px;
-    background-color: rgba(204, 204, 204, 0.699);
+    background-color: rgba(199, 249, 255, 0.699);
 }
 
 .lovedButtonReset{
@@ -144,7 +141,7 @@ body{
     font-family: 'starWarsFont';
     font-size: 25px;
     margin: 10px;
-    background-color: rgba(255, 255, 255, 0.699);
+    background-color: rgba(255, 255, 255, 0.822);
 }
 
 .lovedButton:disabled{
@@ -167,15 +164,15 @@ body{
     margin: 10px;
 }
 
-.hide{
-    display: none;
-}
-
 .title{
     font-family: 'starWarsFont';
     color: white;
     font-size: 40px;
     text-align: center;
+}
+
+.hide{
+    display: none;
 }
 
 @font-face {

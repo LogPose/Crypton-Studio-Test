@@ -31,6 +31,11 @@ export default class CharacterList extends Component {
         })
     }
 
+    // Вызов одних и тех же функций подряд происходит из-за того,
+    // что я не понял, как изменить peopleListPage1-2-3 и т.д. на 
+    // peopleListPage${num}, чтобы вызывать функцию с новым каунтером,
+    // а не писать всё тело функции каждый раз
+
     componentDidMount() {
         this.swapiService
             .getAllPeople(1)
@@ -116,9 +121,6 @@ export default class CharacterList extends Component {
         .catch(() => {
             alert('Ошибка получения данных с сервера! Пожалуйста, перезагрузите страницу!')
         })
-
-        
-
     }
 
     render () {
@@ -171,9 +173,7 @@ export default class CharacterList extends Component {
                         </div>
                     )
                 })
-            } catch (err) {
-                console.log(err)
-            }
+            } catch (err) {}
         }
 
         const likedCharacterList = (arr) => {
@@ -241,14 +241,12 @@ export default class CharacterList extends Component {
         }
 
         const itemFilter = (items, gender) => {
-            if (gender === 'all') {
-                return items
-            } else if (gender === 'male') {
-                return items.filter((item) => item.gender === 'male')
-            } else if (gender === 'female') {
-                return items.filter((item) => item.gender === 'female')
-            } else if (gender === 'n/a') {
-                return items.filter((item) => item.gender === 'n/a')
+            switch(gender) {
+                case 'all': return items;
+                case 'male' : return items.filter((item) => item.gender === 'male');
+                case 'female' : return items.filter((item) => item.gender === 'female');
+                case 'n/a' || 'none' : return items.filter((item) => item.gender === 'n/a');
+                default: return items
             }
         }
 
@@ -260,7 +258,8 @@ export default class CharacterList extends Component {
 
         const content = (visible === true) ? showedContent(count) : liked
         const visibleContent = onSearch(content, term)
-        const showed = visibleContent.length !== 0 ? visibleContent 
+        const showed = visibleContent.length !== 0 ? 
+                        visibleContent 
                         : <h1 className="title">Поиск на этой странице ничего не дал! <br></br> Проверьте
                                                 правильность написания имени или попробуйте поискать
                                                 на другой странице!</h1>
@@ -271,8 +270,6 @@ export default class CharacterList extends Component {
                                     <button className='lovedButton' onClick={() => incrementCount()}>Следующая страница</button>
                                 </div>
 
-        const footer = visible ? originalFooter : null
-
         const genderButtons =   <div>
                                     <button className='lovedButtonMale' onClick={() => this.setState({gender: 'male'})}>Мужчины</button>
                                     <button className='lovedButtonFemale' onClick={() => this.setState({gender: 'female'})}>Женщины</button>
@@ -281,6 +278,8 @@ export default class CharacterList extends Component {
                                 </div>
 
         const genderButtonsVisible = visible ? null : genderButtons
+
+        const footer = visible ? originalFooter : null
 
         return(
             <div className='general'>
