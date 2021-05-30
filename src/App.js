@@ -234,10 +234,10 @@ export default class App extends Component {
         const onSearch = (items, term) => {
             if (term.length === 0) {
                 return items
-              }
-              return items.filter((el) => {
+            }
+            return items.filter((el) => {
                 return el.props.children[2].props.children.toLowerCase().indexOf(term.toLowerCase()) > -1;
-              })
+            })
         }
 
         const itemFilter = (items, gender) => {
@@ -251,16 +251,16 @@ export default class App extends Component {
         }
 
         const liked = likedCharacters.length !== 0 ? 
-                    likedCharacterList(itemFilter(likedCharacters, gender))
-                    : <h1 className="title">Вы ещё не добавили ни одного персонажа в "Любимые"!</h1>
+                      likedCharacterList(itemFilter(likedCharacters, gender))
+                      : likedCharacters
 
         const buttonTitle = (visible === true) ? 'Любимые персонажи' : 'Главная страница'
 
         const content = (visible === true) ? showedContent(count) : liked
         const visibleContent = onSearch(content, term)
         const showed = visibleContent.length !== 0 ? 
-                        visibleContent 
-                        : <h1 className="title">Поиск на этой странице ничего не дал! <br></br> Проверьте
+                       visibleContent 
+                       : <h1 className="title"> Кажется, на этой странице пусто!<br></br> Проверьте
                                                 правильность написания имени или попробуйте поискать
                                                 на другой странице!</h1>
 
