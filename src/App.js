@@ -261,13 +261,13 @@ export default class App extends Component {
 
         const content = (visible === true) ? showedContent(count) : liked
         const visibleContent = onSearch(content, term)
-        const showed = visibleContent.length !== 0 ? 
+        const showedCharacters = visibleContent.length !== 0 ? 
                        visibleContent 
                        : <h1 className="title"> Кажется, на этой странице пусто!<br></br> Проверьте
                                                 правильность написания имени или попробуйте поискать
                                                 на другой странице!</h1>
 
-        const originalFooter =  <div className='footer'>
+        const footer =  <div className='footer'>
                                     <button className='lovedButton' onClick={() => decrementCount()}>Предыдущая страница</button>
                                     <button disabled={true} className='lovedButton'>{count}</button>
                                     <button className='lovedButton' onClick={() => incrementCount()}>Следующая страница</button>
@@ -280,9 +280,9 @@ export default class App extends Component {
                                     <button className='lovedButtonReset' onClick={() => this.setState({gender: 'all'})}>Сбросить</button>
                                 </div>
 
-        const genderButtonsVisible = visible ? null : genderButtons
+        const showedGenderButtons = visible ? null : genderButtons
 
-        const footer = visible ? originalFooter : null
+        const visibleFooter = visible ? footer : null
 
         return(
             <div className='general'>
@@ -291,10 +291,10 @@ export default class App extends Component {
                     <input className='searchPanel' type='text' placeholder='Search' onChange={this.search.bind(this)}></input>         
                 </div>   
                 <div className='charBlock'>
-                        {genderButtonsVisible}
-                    {showed}
+                        {showedGenderButtons}
+                    {showedCharacters}
                 </div>
-                {footer}  
+                {visibleFooter}  
             </div>
         )
     }   
