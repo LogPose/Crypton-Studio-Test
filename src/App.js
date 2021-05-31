@@ -7,7 +7,6 @@ export default class App extends Component {
     swapiService = new ApiService()
 
     state = {
-        loading: true,
         peopleListPage: [],
         currentPage: 1, // Текущая отображаемая страница
         peoplesPerPage: 12,
@@ -16,6 +15,8 @@ export default class App extends Component {
         term: '', // Необходимое для поиска поле
         gender: 'all',
         planets: [],
+        allPeopleCount: null,
+        allPlanetsCount: null,
     }
 
     search(event) {
@@ -26,46 +27,48 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        for (let i = 1; i < 7; i++) {
-            this.swapiService
-            .getAllPlanets(i)
-            .then((result) => 
-                {this.setState(prev => ({
-                planets: [...prev.planets, ...result]
-            }))
-            }
-            )
-        }
-        for (let i = 1; i < 10; i++) {
-            this.swapiService
-            .getAllPeople(i)
-            .then((peopleList) => 
-                {this.setState(prev => ({
-                    peopleListPage: [...prev.peopleListPage, ...peopleList]
-                }),
+        this.swapiService
+        .getPeoplesNumber()
+        .then((res) => {this.setState({allPeopleCount: res.num})})
+        .then(() => {
+            for (let i = 1; i <= Math.ceil(this.state.allPeopleCount / 10); i++) {
+                this.swapiService
+                .getAllPeople(i)
+                .then((peopleList) => 
+                    {this.setState(prev => ({
+                        peopleListPage: [...prev.peopleListPage, ...peopleList]
+                    }),
+                    )
+                }
                 )
             }
-            )
+        })
+        this.swapiService
+        .getPlanetsNumber()
+        .then((res) => {this.setState({allPlanetsCount: res.num})})
         .then(() => {
-            this.setState({loading: false})
+            for (let i = 1; i <= Math.ceil(this.state.allPlanetsCount / 10); i++) {
+                this.swapiService
+                .getAllPlanets(i)
+                .then((result) => 
+                    {this.setState(prev => ({
+                    planets: [...prev.planets, ...result]
+                }))
+                }
+                )
+            }
         })
         .catch(() => {
             alert('Ошибка получения данных с сервера! Пожалуйста, перезагрузите страницу!')
         })
         }
-    }
 
     render () {
         const { peopleListPage, peoplesPerPage,
-            currentPage, likedCharacters, visible, term,
-            loading, gender } = this.state
+            currentPage, likedCharacters, visible, term, gender } = this.state
         
         if (!peopleListPage) {
             return null 
-        }
-
-        if (loading) {
-            return <Spinner />
         }
 
         const indexOfLastPeople = currentPage * peoplesPerPage;
@@ -131,7 +134,7 @@ export default class App extends Component {
         }
 
         const incrementCount = () => {
-            currentPage === 7? alert('Упс! Кажется, туда нельзя!') : 
+            currentPage === Math.ceil(this.state.allPeopleCount / this.state.peoplesPerPage)? alert('Упс! Кажется, туда нельзя!') : 
             this.setState({currentPage: currentPage + 1})
             return currentPage
         }
@@ -200,6 +203,10 @@ export default class App extends Component {
         const visibleFooter = visible && (term === '' || term === ' ') ? footer :  null
 
         const buttonStyle = visible ? 'lovedCharButton' : 'generalPageButton'
+
+        if (visibleContent.length === 0 && term === '' && visible) {
+            return <Spinner />
+        }
 
         return(
             <div className='general'>
