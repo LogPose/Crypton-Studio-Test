@@ -15,6 +15,7 @@ export default class App extends Component {
         visible: true, // Отображение блоков основной/понравившиеся
         term: '', // Необходимое для поиска поле
         gender: 'all',
+        planets: [],
     }
 
     search(event) {
@@ -25,6 +26,16 @@ export default class App extends Component {
     }
 
     componentDidMount() {
+        for (let i = 1; i < 7; i++) {
+            this.swapiService
+            .getAllPlanets(i)
+            .then((result) => 
+                {this.setState(prev => ({
+                planets: [...prev.planets, ...result]
+            }))
+            }
+            )
+        }
         for (let i = 1; i < 10; i++) {
             this.swapiService
             .getAllPeople(i)
@@ -34,7 +45,7 @@ export default class App extends Component {
                 }),
                 )
             }
-            ) 
+            )
         .then(() => {
             this.setState({loading: false})
         })
@@ -110,6 +121,7 @@ export default class App extends Component {
                                 <h1>{el.name}</h1>
                                 <h1>Gender: {el.gender}</h1>
                                 <h1>Birth year: {el.birthYear}</h1>
+                                <h1>Homeworld: {(this.state.planets.find(item => item.url === el.homeworld).name)}</h1>
                         </div>
                     )
                 })
@@ -147,22 +159,18 @@ export default class App extends Component {
         // Фильтр по полу в разделе "Любимые персонажи"
 
         const itemFilter = (items, gender) => {
-            switch(gender) {
-                case 'all': return items;
-                case 'male' : return items.filter((item) => item.gender === 'male');
-                case 'female' : return items.filter((item) => item.gender === 'female');
-                case 'n/a' || 'none' : return items.filter((item) => item.gender === 'n/a');
-                default: return items
-            }
+            if (['male', 'female', 'n/a', 'none'].includes(gender)) {
+                return items.filter(item => item.gender === gender || item.gender === 'n/a')
+              } return items  
         }
 
         const liked = likedCharacters.length !== 0 ? 
                       likedCharacterList(itemFilter(likedCharacters, gender))
                       : likedCharacters
 
-        const buttonTitle = (visible === true) ? 'Любимые персонажи' : 'Главная страница'
+        const buttonTitle = visible ? 'Любимые персонажи' : 'Главная страница'
 
-        const content = (visible === true) ? characters : liked
+        const content = visible ? characters : liked
         const visibleContent = (visible) ? onSearch(allCharacters, term, content) : onSearch(liked, term, liked)
         const showedCharacters = visibleContent.length !== 0 ? 
                        visibleContent 
@@ -189,7 +197,7 @@ export default class App extends Component {
 
         const showedGenderButtons = visible ? null : genderButtons
 
-        const visibleFooter = (visible === true) && (term === '' || term === ' ') ? footer :  null
+        const visibleFooter = visible && (term === '' || term === ' ') ? footer :  null
 
         const buttonStyle = visible ? 'lovedCharButton' : 'generalPageButton'
 

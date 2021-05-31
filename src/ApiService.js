@@ -1,4 +1,9 @@
 export default class ApiService{
+
+    state = {
+        planets: []
+    }
+
     async getResource(url) {
         const res = await fetch(`https://swapi.dev/api${url}`)
         if (!res.ok) {
@@ -22,6 +27,21 @@ export default class ApiService{
             gender: person.gender,
             birthYear: person.birth_year,
             liked: false,
+            homeworld: person.homeworld,
         }
     }
+
+    getAllPlanets = async (count) => {
+        const res = await this.getResource(`/planets/?page=${count}`);
+        return res.results
+          .map(this._transformPlanet)
+      };
+
+      _transformPlanet = (planet) => {
+        return {
+          name: planet.name,
+          url: planet.url
+        };
+      };
+
 }
