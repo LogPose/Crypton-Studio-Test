@@ -158,31 +158,17 @@ body{
     border: 5px rgba(255, 211, 130, 0.623) solid
 }
 
-.lovedButtonMale{
+.lovedButtonChosen{
     width: 200px;
     height: 40px;
     font-family: 'starWarsFont';
     font-size: 25px;
     margin: 10px;
-    background-color: rgba(0, 255, 128, 0.699);
-}
-
-.lovedButtonFemale{
-    width: 200px;
-    height: 40px;
-    font-family: 'starWarsFont';
-    font-size: 25px;
-    margin: 10px;
-    background-color: rgba(252, 255, 88, 0.74);
-}
-
-.lovedButtonAnother{
-    width: 200px;
-    height: 40px;
-    font-family: 'starWarsFont';
-    font-size: 25px;
-    margin: 10px;
-    background-color: rgba(199, 249, 255, 0.699);
+    background-color: rgba(0, 238, 255, 0.800);
+    box-shadow: 2px 2px 8px rgb(0, 238, 255), -2px -2px 8px rgb(0, 238, 255),
+                2px -2px 8px rgb(0, 238, 255), -2px 2px 8px rgb(0, 238, 255) ;
+    border: none;
+    border-radius: 30px;
 }
 
 .lovedButtonReset{
@@ -192,6 +178,7 @@ body{
     font-size: 25px;
     margin: 10px;
     background-color: rgba(255, 255, 255, 0.822);
+    border-radius: 30px;
 }
 
 .lovedButton:disabled{

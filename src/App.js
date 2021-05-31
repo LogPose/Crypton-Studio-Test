@@ -136,7 +136,7 @@ export default class App extends Component {
         // Поиск по имени
 
         const onSearch = (allCharacters, term, currentPeoples) => {
-            if (term.length === 0) {
+            if (term.length === 0 || term === ' ') {
                 return currentPeoples
             }
             return allCharacters.filter((el) => {
@@ -176,16 +176,20 @@ export default class App extends Component {
                                     <button className='lovedButton' onClick={() => incrementCount()}>Следующая страница</button>
                                 </div>
 
+        const maleGenderButtonStyle = (gender === 'male') ? 'lovedButtonChosen' : 'lovedButtonReset'
+        const femaleGenderButtonStyle = (gender === 'female') ? 'lovedButtonChosen' : 'lovedButtonReset'
+        const anotherGenderButtonStyle = (gender === 'n/a') ? 'lovedButtonChosen' : 'lovedButtonReset'
+
         const genderButtons =   <div>
-                                    <button className='lovedButtonMale' onClick={() => this.setState({gender: 'male'})}>Мужчины</button>
-                                    <button className='lovedButtonFemale' onClick={() => this.setState({gender: 'female'})}>Женщины</button>
-                                    <button className='lovedButtonAnother' onClick={() => this.setState({gender: 'n/a'})}>Иное</button>
+                                    <button className={maleGenderButtonStyle} onClick={() => this.setState({gender: 'male'})}>Мужчины</button>
+                                    <button className={femaleGenderButtonStyle} onClick={() => this.setState({gender: 'female'})}>Женщины</button>
+                                    <button className={anotherGenderButtonStyle} onClick={() => this.setState({gender: 'n/a'})}>Иное</button>
                                     <button className='lovedButtonReset' onClick={() => this.setState({gender: 'all'})}>Сбросить</button>
                                 </div>
 
         const showedGenderButtons = visible ? null : genderButtons
 
-        const visibleFooter = (visible === true && term === '') ? footer :  null
+        const visibleFooter = (visible === true) && (term === '' || term === ' ') ? footer :  null
 
         const buttonStyle = visible ? 'lovedCharButton' : 'generalPageButton'
 
