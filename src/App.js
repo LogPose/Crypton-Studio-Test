@@ -138,10 +138,10 @@ export default class App extends Component {
                 src={`https://starwars-visualguide.com/assets/img/characters/${el.id}.jpg`}
               ></img>
               <br></br>
-              <h1>{el.name}</h1>
+              <h1 style={{color: 'rgb(155, 14, 14)'}}>{el.name}</h1>
               <h1>Gender: {el.gender}</h1>
               <h1>Birth year: {el.birthYear}</h1>
-              <h1>
+              <h1 style={{fontSize: '22px'}}>
                 Homeworld:{" "}
                 {
                   this.state.planets.find((item) => item.url === el.homeworld)
