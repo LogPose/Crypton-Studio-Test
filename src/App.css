@@ -3,6 +3,9 @@ body{
     padding: 0;
     background-image: url(./background.jpg);
     background-size: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .char{
@@ -40,6 +43,7 @@ body{
     border-radius: 50%;
     border: none;
     background-color: rgba(71, 223, 104, 0.575);
+    outline: none;
 }
 
 .likeButton:hover{
@@ -108,6 +112,52 @@ body{
     margin: 10px;
 }
 
+.lovedCharButton{
+    width: 250px;
+    height: 50px;
+    font-family: 'starWarsFont';
+    font-size: 25px;
+    margin: 10px;
+    background-color: rgba(189, 74, 255, 0.733);
+    border-radius: 50px;
+    color: white;
+    border: 5px rgba(216, 88, 255, 0.623) solid;
+    outline: none;
+}
+
+.lovedCharButton:hover{
+    background-color: rgba(203, 91, 255, 0.795);
+    border: 5px rgba(111, 9, 131, 0.623) solid
+}
+
+.lovedCharButton:active{
+    background-color: rgba(106, 2, 138, 0.945);
+    border: 5px rgba(220, 130, 255, 0.623) solid
+}
+
+.generalPageButton{
+    width: 250px;
+    height: 50px;
+    font-family: 'starWarsFont';
+    font-size: 25px;
+    margin: 10px;
+    background-color: rgba(255, 92, 42, 0.596);
+    border-radius: 50px;
+    color: white;
+    border: 5px rgba(255, 190, 104, 0.623) solid;
+    outline: none;
+}
+
+.generalPageButton:hover{
+    background-color: rgba(255, 81, 0, 0.795);
+    border: 5px rgba(131, 48, 9, 0.623) solid
+}
+
+.generalPageButton:active{
+    background-color: rgba(138, 56, 2, 0.945);
+    border: 5px rgba(255, 211, 130, 0.623) solid
+}
+
 .lovedButtonMale{
     width: 200px;
     height: 40px;
@@ -162,6 +212,7 @@ body{
     font-family: 'starWarsFont';
     font-size: 25px;
     margin: 10px;
+    outline: none;
 }
 
 .title{

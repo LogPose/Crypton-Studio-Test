@@ -8,15 +8,9 @@ export default class App extends Component {
 
     state = {
         loading: true,
-        peopleListPage1: null,
-        peopleListPage2: null,
-        peopleListPage3: null,
-        peopleListPage4: null,
-        peopleListPage5: null,
-        peopleListPage6: null,
-        peopleListPage7: null,
-        peopleListPage8: null,
-        count: 1, // Текущая отображаемая страница
+        peopleListPage: [],
+        currentPage: 1, // Текущая отображаемая страница
+        peoplesPerPage: 12,
         likedCharacters: [], 
         visible: true, // Отображение блоков основной/понравившиеся
         term: '', // Необходимое для поиска поле
@@ -30,113 +24,42 @@ export default class App extends Component {
         })
     }
 
-    // Вызов одних и тех же функций подряд происходит из-за того,
-    // что я не понял, как изменить peopleListPage1-2-3 и т.д. на 
-    // peopleListPage${num}, чтобы вызывать функцию с новым каунтером,
-    // а не писать всё тело функции каждый раз
-
     componentDidMount() {
-        this.swapiService
-            .getAllPeople(1)
+        for (let i = 1; i < 10; i++) {
+            this.swapiService
+            .getAllPeople(i)
             .then((peopleList) => 
-                {this.setState({
-                    peopleListPage1: peopleList
-                },
+                {this.setState(prev => ({
+                    peopleListPage: [...prev.peopleListPage, ...peopleList]
+                }),
                 )
             }
-            )
-        .then(
-            this.swapiService
-            .getAllPeople(2)
-            .then((peopleList) => 
-                {this.setState({
-                    peopleListPage2: peopleList
-                },
-                )
-        })
-        ).then(
-            this.swapiService
-            .getAllPeople(3)
-            .then((peopleList) => 
-                {this.setState({
-                    peopleListPage3: peopleList
-                },
-                )
-            })
-        )
-        .then(
-            this.swapiService
-            .getAllPeople(4)
-            .then((peopleList) => 
-                {this.setState({
-                    peopleListPage4: peopleList
-                },
-                )
-            })
-        )
-        .then(
-            this.swapiService
-            .getAllPeople(5)
-            .then((peopleList) => 
-                {this.setState({
-                    peopleListPage5: peopleList
-                },
-                )
-            })
-        )
-        .then(
-            this.swapiService
-            .getAllPeople(6)
-            .then((peopleList) => 
-                {this.setState({
-                    peopleListPage6: peopleList
-                },
-                )
-            })
-        )
-        .then(
-            this.swapiService
-            .getAllPeople(7)
-            .then((peopleList) => 
-                {this.setState({
-                    peopleListPage7: peopleList
-                },
-                )
-            })
-        )
-        .then(
-            this.swapiService
-            .getAllPeople(8)
-            .then((peopleList) => 
-                {this.setState({
-                    peopleListPage8: peopleList
-                },
-                )
-            })    
-        )
+            ) 
         .then(() => {
             this.setState({loading: false})
         })
         .catch(() => {
             alert('Ошибка получения данных с сервера! Пожалуйста, перезагрузите страницу!')
         })
+        }
     }
 
     render () {
-        const { peopleListPage1, peopleListPage2,
-            peopleListPage3, peopleListPage4,
-            peopleListPage5, peopleListPage6,
-            peopleListPage7, peopleListPage8,
-            count, likedCharacters, visible, term,
+        const { peopleListPage, peoplesPerPage,
+            currentPage, likedCharacters, visible, term,
             loading, gender } = this.state
         
-        if (!peopleListPage1) {
+        if (!peopleListPage) {
             return null 
         }
 
         if (loading) {
             return <Spinner />
         }
+
+        const indexOfLastPeople = currentPage * peoplesPerPage;
+        const indexOfFirstPeople = indexOfLastPeople - peoplesPerPage;
+        const currentPeoples = peopleListPage.slice(indexOfFirstPeople, indexOfLastPeople);
 
         const characterList = (arr) => {
 
@@ -155,7 +78,7 @@ export default class App extends Component {
                 }
             }
 
-            const like = <span>&#128154;</span>
+            const like = <span>&#129505;</span>
             const cannotLike = <span>&#128153;</span>
 
             try {
@@ -196,47 +119,27 @@ export default class App extends Component {
         }
 
         const incrementCount = () => {
-            count === 8? alert('Упс! Кажется, туда нельзя!') : 
-            this.setState({count: count + 1})
-            return count
+            currentPage === 7? alert('Упс! Кажется, туда нельзя!') : 
+            this.setState({currentPage: currentPage + 1})
+            return currentPage
         }
 
         const decrementCount = () => {
-            count === 1 ? alert('Упс! Кажется, туда нельзя!') : 
-            this.setState({count: count - 1})
-            return count
+            currentPage === 1 ? alert('Упс! Кажется, туда нельзя!') : 
+            this.setState({currentPage: currentPage - 1})
+            return currentPage
         }
         
-        const characters1 = characterList(peopleListPage1)
-        const characters2 = characterList(peopleListPage2)
-        const characters3 = characterList(peopleListPage3)
-        const characters4 = characterList(peopleListPage4)
-        const characters5 = characterList(peopleListPage5)
-        const characters6 = characterList(peopleListPage6)
-        const characters7 = characterList(peopleListPage7)
-        const characters8 = characterList(peopleListPage8)
-
-        function showedContent(count) {
-            switch(count) {
-                case 1: return characters1;
-                case 2: return characters2;
-                case 3: return characters3;
-                case 4: return characters4;
-                case 5: return characters5;
-                case 6: return characters6;
-                case 7: return characters7;
-                case 8: return characters8;
-                default: return characters1
-            }
-        }
+        const characters = characterList(currentPeoples)
+        const allCharacters = characterList(peopleListPage)
 
         // Поиск по имени
 
-        const onSearch = (items, term) => {
+        const onSearch = (allCharacters, term, currentPeoples) => {
             if (term.length === 0) {
-                return items
+                return currentPeoples
             }
-            return items.filter((el) => {
+            return allCharacters.filter((el) => {
                 return el.props.children[2].props.children.toLowerCase().indexOf(term.toLowerCase()) > -1;
             })
         }
@@ -259,8 +162,8 @@ export default class App extends Component {
 
         const buttonTitle = (visible === true) ? 'Любимые персонажи' : 'Главная страница'
 
-        const content = (visible === true) ? showedContent(count) : liked
-        const visibleContent = onSearch(content, term)
+        const content = (visible === true) ? characters : liked
+        const visibleContent = (visible) ? onSearch(allCharacters, term, content) : onSearch(liked, term, liked)
         const showedCharacters = visibleContent.length !== 0 ? 
                        visibleContent 
                        : <h1 className="title"> Кажется, на этой странице пусто!<br></br> Проверьте
@@ -269,7 +172,7 @@ export default class App extends Component {
 
         const footer =  <div className='footer'>
                                     <button className='lovedButton' onClick={() => decrementCount()}>Предыдущая страница</button>
-                                    <button disabled={true} className='lovedButton'>{count}</button>
+                                    <button disabled={true} className='lovedButton'>{currentPage}</button>
                                     <button className='lovedButton' onClick={() => incrementCount()}>Следующая страница</button>
                                 </div>
 
@@ -282,12 +185,14 @@ export default class App extends Component {
 
         const showedGenderButtons = visible ? null : genderButtons
 
-        const visibleFooter = visible ? footer : null
+        const visibleFooter = (visible === true && term === '') ? footer :  null
+
+        const buttonStyle = visible ? 'lovedCharButton' : 'generalPageButton'
 
         return(
             <div className='general'>
                 <div className='header'>
-                    <button className='lovedButton' onClick={() => this.setState({visible: !visible})}>{buttonTitle}</button>
+                    <button className={buttonStyle} onClick={() => this.setState({visible: !visible, gender: 'all'})}>{buttonTitle}</button>
                     <input className='searchPanel' type='text' placeholder='Search' onChange={this.search.bind(this)}></input>         
                 </div>   
                 <div className='charBlock'>
