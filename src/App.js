@@ -26,6 +26,10 @@ export default class App extends Component {
     });
   }
 
+  charFilter = (a, b) => {
+    return a.id - b.id;
+  };
+
   componentDidMount() {
     this.swapiService
       .getPeoplesNumber()
@@ -33,10 +37,12 @@ export default class App extends Component {
         this.setState({ allPeopleCount: res.num });
       })
       .then(() => {
-        for (let i = 1; i <= Math.ceil(this.state.allPeopleCount / 10); i++) {
+        for (let i = Math.ceil(this.state.allPeopleCount / 10); i >= 1; i--) {
           this.swapiService.getAllPeople(i).then((peopleList) => {
             this.setState((prev) => ({
-              peopleListPage: [...prev.peopleListPage, ...peopleList],
+              peopleListPage: [...prev.peopleListPage, ...peopleList].sort(
+                this.charFilter
+              ),
             }));
           });
         }
@@ -138,10 +144,10 @@ export default class App extends Component {
                 src={`https://starwars-visualguide.com/assets/img/characters/${el.id}.jpg`}
               ></img>
               <br></br>
-              <h1 style={{color: 'rgb(155, 14, 14)'}}>{el.name}</h1>
+              <h1 style={{ color: "rgb(155, 14, 14)" }}>{el.name}</h1>
               <h1>Gender: {el.gender}</h1>
               <h1>Birth year: {el.birthYear}</h1>
-              <h1 style={{fontSize: '22px'}}>
+              <h1 style={{ fontSize: "22px" }}>
                 Homeworld:{" "}
                 {
                   this.state.planets.find((item) => item.url === el.homeworld)
@@ -193,9 +199,7 @@ export default class App extends Component {
 
     const itemFilter = (items, gender) => {
       if (["male", "female", "n/a", "none"].includes(gender)) {
-        return items.filter(
-          (item) => item.gender === gender || item.gender === "n/a"
-        );
+        return items.filter((item) => item.gender === gender);
       }
       return items;
     };
